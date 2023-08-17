@@ -1,0 +1,64 @@
+CXX=g++-9 
+EXE = iplC
+CXXDEBUG = -g -O0  -Wall 
+CXXSTD = -std=c++11
+
+.PHONY: all	
+all: parser.o scanner.o  ast.o type.o symbtab.o main.o	
+	$(CXX) $(CXXDEBUG) parser.o scanner.o  type.o symbtab.o ast.o main.o -o $(EXE)
+	iplC input/as-test1.c 2> output/as-test1.debug.output > output/test1.json
+	iplC input/as-test2.c 2> output/as-test2.debug.output > output/test2.json
+	iplC input/as-test3.c 2> output/as-test3.debug.output > output/test3.json
+	iplC input/example.c 2> output/example.debug.output > output/example.json
+	iplC input/as-array.c 2> output/as-array.debug.output > output/as-array.json
+	iplC input/as-pointers.c 2> output/as-pointers.debug.output > output/as-pointers.json
+	iplC input/as-largest.c 2> output/as-largest.debug.output > output/as-largest.json
+	iplC input/as-armstrong.c 2> output/as-armstrong.debug.output > output/as-armstrong.json
+	iplC input/as-matrixmul.c 2> output/as-matrixmul.debug.output > output/as-matrixmul.json
+	iplC input/as-test1.c 2> output/as-test1.debug.output > output/as-test1.json
+	iplC input/as-test2.c 2> output/as-test2.debug.output > output/as-test2.json
+	iplC input/as-test3.c 2> output/as-test3.debug.output > output/as-test3.json
+	#iplC input/si-collatz.c 2> output/si-collatz.debug.output > output/si-collatz.json	
+	#iplC input/si-random_things_1.c 2> output/si-random_things_1.debug.output > output/si-random_things_1.json
+	#iplC input/si-random_things_2.c 2> output/si-random_things_2.debug.output > output/si-random_things_2.json
+	#iplC input/si-random_things_3.c 2> output/si-random_things_3.debug.output > output/si-random_things_3.json
+	#iplC input/si-random_things_4.c 2> output/si-random_things_4.debug.output > output/si-random_things_4.json
+	iplC input/si-random_things_5.c 2> output/si-random_things_5.debug.output > output/si-random_things_5.json
+	iplC input/test-prathamesh.c 2> output/test-prathamesh.debug.output > output/test-prathamesh.json
+	iplC input/test-dhananjay.c 2> output/test-dhananjay.debug.output > output/test-dhananjay.json
+	iplC input/test-kanishka.c 2> output/test-kanishka.debug.output > output/test-kanishka.json
+	iplC input/test-sanyam.c 2> output/test-sanyam.debug.output > output/test-sanyam.json
+	iplC input/test-dhruv.c 2> output/test-dhruv.debug.output > output/test-dhruv.json
+	iplC input/test-manish.c 2> output/test-manish.debug.output > output/test-manish.json
+	iplC input/test-khyati.c 2> output/test-khyati.debug.output > output/test-khyati.json
+	iplC input/pos:sb_test1.c 2> output/pos:sb_test1.debug.output > output/pos:sb_test1.json
+	#iplC input/neg:sb_test2.c 2> output/neg:sb_test2.debug.output > output/neg:sb_test2.json
+	iplC input/as-test4.c 2> output/as-test4.debug.output > output/as-test4.json
+	iplC input/as-test5.c 2> output/as-test5.debug.output > output/as-test5.json
+	iplC input/as-test6.c 2> output/as-test6.debug.output > output/as-test6.json
+	iplC input/as-test7.c 2> output/as-test7.debug.output > output/as-test7.json
+	iplC input/as-test8.c 2> output/as-test8.debug.output > output/as-test8.json
+
+main.o: main.cpp
+	$(CXX) $(CXXDEBUG) -c main.cpp -o main.o
+
+type.o: type.cpp
+	$(CXX) $(CXXDEBUG) -c type.cpp -o type.o
+
+symbtab.o: symbtab.cpp
+	$(CXX) $(CXXDEBUG) -c symbtab.cpp -o symbtab.o
+
+ast.o: ast.hh ast.cpp
+	$(CXX) $(CXXDEBUG) -c ast.cpp -o ast.o
+
+parser.o: parser.yy 
+	bison -v --graph $<  
+	$(CXX) $(CXXDEBUG) -c parser.tab.cc -o parser.o 
+
+scanner.o: scanner.l scanner.hh parser.tab.hh parser.tab.cc	
+	flex++ --outfile=scanner.yy.cc  $<
+	$(CXX)  $(CXXDEBUG) -c scanner.yy.cc -o scanner.o
+
+.PHONY: clean
+clean:
+	rm *.o parser.tab.cc parser.output scanner.yy.cc output/*
